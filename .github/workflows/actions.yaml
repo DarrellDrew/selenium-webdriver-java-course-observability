@@ -14,16 +14,16 @@ jobs:
       HEADLESS_CHROME: true
 
     steps:
+      - name: Set start time
+        run: echo "START_TIME=$(date +$s)" >> $GITHUB_ENV
       - uses: actions/checkout@v2
-        # install Java
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
           java-version: 16
-        # Run the command mvn test
       - name: Run tests with maven
         working-directory: webdriver_java
         run: mvn test
-          #Handle remote server Chrome driver
-
-#What steps within each job
+      - name: Collect build data
+        if: always()
+        run: expr $(date +%s) - ${START_TIME}
